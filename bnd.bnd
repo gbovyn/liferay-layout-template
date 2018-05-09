@@ -1,0 +1,5 @@
+Bundle-Name: layout-template
+Bundle-SymbolicName: be.gfi.liferay.tpl
+Bundle-Version: 1.0.0
+Export-Package: be.gfi.liferay.tpl.constants
+-metatype: *
