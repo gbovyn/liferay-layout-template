@@ -15,6 +15,8 @@ import java.util.Map;
 
 public class ZipUtil {
 
+	private static final String JAR_URI_SCHEME = "jar:";
+
 	public static Try<Path> getFileFromZip(final Path zipPath, final String filename) {
 		return Try.withResources(() -> getZipAsFileSystem(zipPath)).of(fs ->
 				fs.getPath(filename)
@@ -68,7 +70,7 @@ public class ZipUtil {
 	}
 
 	/*
-	 *   Private methods
+	 * Private methods
 	 */
 	private static FileSystem getZipAsFileSystem(final Path zipPath) throws IOException {
 		return FileSystems.newFileSystem(
@@ -79,7 +81,7 @@ public class ZipUtil {
 
 	private static URI getUriToJar(final Path zipPath) {
 		return URI.create(
-				"jar:" + zipPath.toUri()
+				JAR_URI_SCHEME + zipPath.toUri()
 		);
 	}
 

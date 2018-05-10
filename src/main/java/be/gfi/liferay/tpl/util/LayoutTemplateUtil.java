@@ -86,10 +86,10 @@ public class LayoutTemplateUtil {
 			return Try.failure(tryToUpdateXmlConfig.getCause());
 		}
 
-		final Try trytoAddZip = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getTemplatePath(), content);
+		final Try tryToAddZip = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getTemplatePath(), content);
 
-		if (trytoAddZip.isFailure()) {
-			return Try.failure(trytoAddZip.getCause());
+		if (tryToAddZip.isFailure()) {
+			return Try.failure(tryToAddZip.getCause());
 		}
 
 		return Try.success(layoutTemplate);
@@ -100,7 +100,7 @@ public class LayoutTemplateUtil {
 	 *
 	 * @param zipPath        the zip file containing the template to be deleted.
 	 * @param layoutTemplate the template to be deleted.
-	 * @return
+	 * @return whether the try to delete the template was successful or not.
 	 */
 	public static Try deleteLayoutTemplate(final Path zipPath, final LayoutTemplate layoutTemplate) {
 		return Try.success(null);

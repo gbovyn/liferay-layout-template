@@ -6,7 +6,7 @@
 	portletDisplay.setShowBackIcon(true);
 	portletDisplay.setURLBack(redirect);
 
-    ZipEntry layoutTemplate = (ZipEntry) request.getAttribute("layoutTemplate");
+    File layoutTemplate = (ZipEntry) request.getAttribute("layoutTemplate");
 	String templateContent = (String) request.getAttribute("templateContent");
 %>
 

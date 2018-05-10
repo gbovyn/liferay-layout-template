@@ -9,7 +9,7 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.zip.ZipEntry" %>
+<%@ page import="java.io.File" %>
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>

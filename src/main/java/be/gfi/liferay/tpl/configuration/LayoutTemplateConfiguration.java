@@ -8,9 +8,9 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 		scope = ExtendedObjectClassDefinition.Scope.SYSTEM
 )
 @Meta.OCD(
-	id = "be.gfi.liferay.tpl.configuration.LayoutTemplateConfiguration",
-	localization = "content/Language",
-	name = "layout-template-portlet-configuration-name"
+		id = "be.gfi.liferay.tpl.configuration.LayoutTemplateConfiguration",
+		localization = "content/Language",
+		name = "layout-template-portlet-configuration-name"
 )
 public interface LayoutTemplateConfiguration {
 
