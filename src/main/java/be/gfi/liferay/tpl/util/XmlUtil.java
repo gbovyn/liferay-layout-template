@@ -6,7 +6,6 @@ import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import io.vavr.control.Try;
-import org.w3c.dom.NamedNodeMap;
 
 public class XmlUtil {
 
@@ -51,7 +50,7 @@ public class XmlUtil {
 		return document;
 	}
 
-	public static Element createCustomLayoutTemplate(final LayoutTemplate layoutTemplate) {
+	private static Element createCustomLayoutTemplate(final LayoutTemplate layoutTemplate) {
 		final Element layoutTemplateElement = SAXReaderUtil.createElement(LAYOUT_TEMPLATE);
 
 		layoutTemplateElement.addAttribute(ID, layoutTemplate.getId());
@@ -69,19 +68,9 @@ public class XmlUtil {
 		return layoutTemplateElement;
 	}
 
-	public static Try<Document> parseXml(final String liferayLayoutTemplatesXml) {
+	private static Try<Document> parseXml(final String liferayLayoutTemplatesXml) {
 		return Try.of(() ->
 				UnsecureSAXReaderUtil.read(liferayLayoutTemplatesXml)
 		);
-	}
-
-	public static String getAttributeValue(final NamedNodeMap attributes, final String id) {
-		return attributes.getNamedItem(id).getNodeValue();
-	}
-
-	public static String getElementValue(final org.w3c.dom.Element layoutTemplateNode, final String s) {
-		return layoutTemplateNode.getElementsByTagName(s)
-				.item(0)
-				.getNodeValue();
 	}
 }

@@ -15,9 +15,9 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
 public interface LayoutTemplateConfiguration {
 
 	@Meta.AD(deflt = "my-liferay-layout-layouttpl.war", name = "war-name", required = false)
-	public String warName();
+	String warName();
 
 	@Meta.AD(deflt = "osgi/war", name = "osgi-war-folder", required = false)
-	public String osgiWarFolder();
+	String osgiWarFolder();
 
 }

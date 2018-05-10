@@ -2,10 +2,10 @@ package be.gfi.liferay.tpl.model;
 
 public class LayoutTemplate {
 
-	private String id;
-	private String name;
-	private String templatePath;
-	private String thumbnailPath;
+	private final String id;
+	private final String name;
+	private final String templatePath;
+	private final String thumbnailPath;
 
 	public LayoutTemplate(final String id, final String name, final String templatePath, final String thumbnailPath) {
 		this.id = id;

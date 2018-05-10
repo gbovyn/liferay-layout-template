@@ -38,7 +38,7 @@ import java.util.Locale;
 		service = MVCRenderCommand.class
 )
 public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
-	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
 	private volatile ConfigurationHelper configurationHelper;
 

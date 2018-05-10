@@ -27,7 +27,7 @@ import java.nio.file.Path;
 		service = MVCActionCommand.class
 )
 public class CreateTemplateMVCActionCommand extends BaseMVCActionCommand {
-	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
 	private static final String TPL_EXT = ".tpl";
 	private static final String PNG_EXT = ".png";

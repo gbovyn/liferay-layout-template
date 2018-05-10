@@ -18,7 +18,7 @@ import javax.portlet.ActionResponse;
 )
 public class DeleteTemplateMVCActionCommand extends BaseMVCActionCommand {
 	@Override
-	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) throws Exception {
+	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
 		//LayoutTemplateUtil.deleteLayoutTemplate(zipPath, layoutTemplate);
 	}
 }

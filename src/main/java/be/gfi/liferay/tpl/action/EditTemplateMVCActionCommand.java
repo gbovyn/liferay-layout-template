@@ -27,7 +27,7 @@ import java.nio.file.Path;
 		service = MVCActionCommand.class
 )
 public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
-	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
 	private ConfigurationHelper configurationHelper;
 
