@@ -33,13 +33,9 @@ public class XmlUtil {
 		return Try.success(rootElement.element("custom"));
 	}
 
-	public static Try addCustomLayoutTemplate(final Try<String> liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
-		if (liferayLayoutTemplatesXml.isFailure()) {
-			return Try.failure(liferayLayoutTemplatesXml.getCause());
-		}
-
+	public static Try<Document> addCustomLayoutTemplate(final String liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
 		final Try<Document> document = Try.of(() ->
-				SAXReaderUtil.read(liferayLayoutTemplatesXml.get())
+				SAXReaderUtil.read(liferayLayoutTemplatesXml)
 		);
 
 		if (document.isFailure()) {
@@ -52,7 +48,7 @@ public class XmlUtil {
 				createCustomLayoutTemplate(layoutTemplate)
 		);
 
-		return Try.success(customElement);
+		return document;
 	}
 
 	public static Element createCustomLayoutTemplate(final LayoutTemplate layoutTemplate) {

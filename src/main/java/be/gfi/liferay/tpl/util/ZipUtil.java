@@ -44,7 +44,7 @@ public class ZipUtil {
 	public static Try<Path> writeFileToZip(final Path zipPath, final String filename, final String content) {
 		return Try.withResources(() -> getZipAsFileSystem(zipPath)).of(fs -> {
 					final Path path = Files.write(
-							fs.getPath(filename), content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING
+							fs.getPath(filename), content.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
 					);
 
 					Files.setLastModifiedTime(

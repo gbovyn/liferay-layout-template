@@ -1,5 +1,6 @@
 package be.gfi.liferay.tpl.action;
 
+import be.gfi.liferay.tpl.configuration.ConfigurationHelper;
 import be.gfi.liferay.tpl.constants.LayoutTemplatePortletKeys;
 import be.gfi.liferay.tpl.util.LayoutTemplateUtil;
 import be.gfi.liferay.tpl.util.LiferayUtil;
@@ -11,7 +12,10 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import io.vavr.control.Try;
 import org.apache.commons.io.FileUtils;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -34,11 +38,18 @@ import java.util.Locale;
 		service = MVCRenderCommand.class
 )
 public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
+	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
+
+	private volatile ConfigurationHelper configurationHelper;
 
 	@Override
 	public String render(final RenderRequest renderRequest, final RenderResponse renderResponse) {
 		final String layoutTemplatePath = renderRequest.getParameter("layoutTemplatePath");
-		final Path layoutTemplateWar = LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"); // TODO
+		final Path layoutTemplateWar = LiferayUtil.getOsgiWarFolder().resolve(
+				configurationHelper.getWarName()
+		);
+
+		logger.debug("Editing %s from %s", layoutTemplatePath, layoutTemplateWar.toString());
 
 		final Try<Path> layoutTemplate = ZipUtil.getFileFromZip(layoutTemplateWar, layoutTemplatePath);
 		final Try<BasicFileAttributes> layoutTemplateAttributes = ZipUtil.getFileAttributesFromZip(layoutTemplateWar, layoutTemplatePath);
@@ -95,5 +106,10 @@ public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
 		ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
 		return themeDisplay.getUser();
+	}
+
+	@Activate
+	private void activate() {
+		configurationHelper = new ConfigurationHelper();
 	}
 }

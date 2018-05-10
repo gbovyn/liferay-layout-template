@@ -9,7 +9,7 @@
 	<div class="card main-content-card">
 		<div class="card-row card-row-padded">
             <liferay-ui:search-container
-                    delta="2"
+                    delta="5"
                     emptyResultsMessage="No layout template found"
                     iteratorURL="<%= iteratorURL %>"
                     total="<%= templates.size() %>"

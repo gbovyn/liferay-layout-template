@@ -1,6 +1,7 @@
 package be.gfi.liferay.tpl.util;
 
 import be.gfi.liferay.tpl.model.LayoutTemplate;
+import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import io.vavr.control.Try;
 
@@ -65,10 +66,24 @@ public class LayoutTemplateUtil {
 			return Try.failure(layoutTemplatesXml.getCause());
 		}
 
-		final Try tryToAddXml = XmlUtil.addCustomLayoutTemplate(layoutTemplatesXml, layoutTemplate);
+		final Try<Document> tryToAddXml = XmlUtil.addCustomLayoutTemplate(layoutTemplatesXml.get(), layoutTemplate);
 
 		if (tryToAddXml.isFailure()) {
 			return Try.failure(tryToAddXml.getCause());
+		}
+
+		final Try<String> xml = Try.of(() ->
+				tryToAddXml.get().formattedString()
+		);
+
+		if (xml.isFailure()) {
+			return Try.failure(xml.getCause());
+		}
+
+		final Try<Path> tryToUpdateXmlConfig = ZipUtil.writeFileToZip(zipPath, getXmlConfigPathInZip(), xml.get());
+
+		if (tryToUpdateXmlConfig.isFailure()) {
+			return Try.failure(tryToUpdateXmlConfig.getCause());
 		}
 
 		final Try trytoAddZip = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getTemplatePath(), content);
@@ -80,11 +95,22 @@ public class LayoutTemplateUtil {
 		return Try.success(layoutTemplate);
 	}
 
+	/**
+	 * Delete an existing layout template from the zip passed as parameter.
+	 *
+	 * @param zipPath        the zip file containing the template to be deleted.
+	 * @param layoutTemplate the template to be deleted.
+	 * @return
+	 */
 	public static Try deleteLayoutTemplate(final Path zipPath, final LayoutTemplate layoutTemplate) {
 		return Try.success(null);
 	}
 
 	private static Try<String> getLayoutTemplatesXml(final Path zipPath) {
-		return ZipUtil.readFileFromZip(zipPath, WEB_INF + "/" + XML_CONFIG);
+		return ZipUtil.readFileFromZip(zipPath, getXmlConfigPathInZip());
+	}
+
+	private static String getXmlConfigPathInZip() {
+		return WEB_INF + "/" + XML_CONFIG;
 	}
 }

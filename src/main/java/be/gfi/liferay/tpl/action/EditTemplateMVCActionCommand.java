@@ -1,5 +1,6 @@
 package be.gfi.liferay.tpl.action;
 
+import be.gfi.liferay.tpl.configuration.ConfigurationHelper;
 import be.gfi.liferay.tpl.constants.LayoutTemplatePortletKeys;
 import be.gfi.liferay.tpl.util.LiferayUtil;
 import be.gfi.liferay.tpl.util.ZipUtil;
@@ -8,6 +9,7 @@ import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import io.vavr.control.Try;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ import java.nio.file.Path;
 public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
 	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
+	private ConfigurationHelper configurationHelper;
+
 	@Override
 	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
 		final String redirect = ParamUtil.getString(actionRequest, "redirect");
@@ -35,12 +39,17 @@ public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
 		final String content = actionRequest.getParameter("content");
 
 		final Try<Path> tryToUpdate = ZipUtil.writeFileToZip(
-				LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"), name, content // TODO use configuration
+				LiferayUtil.getOsgiWarFolder().resolve(configurationHelper.getWarName()), name, content
 		);
 
 		if (tryToUpdate.isFailure()) {
 			SessionErrors.add(actionRequest, "error", tryToUpdate.getCause());
 			logger.error(tryToUpdate.getCause().getMessage());
 		}
+	}
+
+	@Activate
+	private void activate() {
+		configurationHelper = new ConfigurationHelper();
 	}
 }
