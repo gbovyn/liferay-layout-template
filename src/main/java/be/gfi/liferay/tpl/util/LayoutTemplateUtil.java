@@ -14,6 +14,9 @@ public class LayoutTemplateUtil {
 	private static final String WEB_INF = "WEB-INF";
 	private static final String XML_CONFIG = "liferay-layout-templates.xml";
 
+	private static final String TPL_EXT = ".tpl";
+	private static final String PNG_EXT = ".png";
+
 	private static final String PROPERTIES_FILE = "liferay-plugin-package.properties";
 
 	public static Try<List<LayoutTemplate>> getCustomLayoutTemplates(final Path zipPath) {
@@ -103,7 +106,47 @@ public class LayoutTemplateUtil {
 	 * @return whether the try to delete the template was successful or not.
 	 */
 	public static Try deleteLayoutTemplate(final Path zipPath, final LayoutTemplate layoutTemplate) {
-		return Try.success(null);
+		final Try<String> layoutTemplatesXml = getLayoutTemplatesXml(zipPath);
+
+		if (layoutTemplatesXml.isFailure()) {
+			return Try.failure(layoutTemplatesXml.getCause());
+		}
+
+		final Try<Document> tryToRemoveXml = XmlUtil.removeLayoutTemplate(layoutTemplatesXml.get(), layoutTemplate.getId());
+
+		if (tryToRemoveXml.isFailure()) {
+			return Try.failure(tryToRemoveXml.getCause());
+		}
+
+		final Try<String> xml = Try.of(() ->
+				tryToRemoveXml.get().formattedString()
+		);
+
+		if (xml.isFailure()) {
+			return Try.failure(xml.getCause());
+		}
+
+		final Try<Path> tryToUpdateXmlConfig = ZipUtil.writeFileToZip(zipPath, getXmlConfigPathInZip(), xml.get());
+
+		if (tryToUpdateXmlConfig.isFailure()) {
+			return Try.failure(tryToUpdateXmlConfig.getCause());
+		}
+
+		final Try tryToDeleteZip = ZipUtil.deleteFileFromZip(zipPath, layoutTemplate.getTemplatePath());
+
+		if (tryToDeleteZip.isFailure()) {
+			return Try.failure(tryToDeleteZip.getCause());
+		}
+
+		return Try.success(layoutTemplate);
+	}
+
+	public static String getTemplatePath(final String id) {
+		return id.replace('-', '_') + TPL_EXT;
+	}
+
+	public static String getThumbnailPath(final String id) {
+		return id.replace('-', '_') + PNG_EXT;
 	}
 
 	private static Try<String> getLayoutTemplatesXml(final Path zipPath) {

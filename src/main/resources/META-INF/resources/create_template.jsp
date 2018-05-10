@@ -21,10 +21,14 @@
 
 			<div class="row">
 			    <div class="col-md-6">
-                    <aui:input name="id" value="<%= StringPool.BLANK %>" />
+                    <aui:input name="id" value="<%= StringPool.BLANK %>">
+                        <aui:validator name="required" />
+                    </aui:input>
                 </div>
 				<div class="col-md-6">
-			        <aui:input name="name" value="<%= StringPool.BLANK %>" />
+			        <aui:input name="name" value="<%= StringPool.BLANK %>">
+			            <aui:validator name="required" />
+			        </aui:input>
 				</div>
             </div>
 

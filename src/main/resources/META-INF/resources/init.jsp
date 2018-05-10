@@ -9,8 +9,6 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="java.util.List" %>
-<%@ page import="java.nio.file.Path" %>
-<%@ page import="java.nio.file.attribute.BasicFileAttributes" %>
 <%@ page import="javax.portlet.PortletURL" %>
 
 <%@ page import="com.liferay.portal.kernel.dao.search.ResultRow" %>

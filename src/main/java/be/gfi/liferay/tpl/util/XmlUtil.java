@@ -29,7 +29,7 @@ public class XmlUtil {
 
 		final Element rootElement = document.get().getRootElement();
 
-		return Try.success(rootElement.element("custom"));
+		return Try.success(rootElement.element(CUSTOM_ELEMENT));
 	}
 
 	public static Try<Document> addCustomLayoutTemplate(final String liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
@@ -66,6 +66,34 @@ public class XmlUtil {
 		layoutTemplateElement.add(thumbnailPath);
 
 		return layoutTemplateElement;
+	}
+
+	/**
+	 * Remove the layout template entry from the liferay-layout-templates.xml file.
+	 *
+	 * @param liferayLayoutTemplatesXml xml config file.
+	 * @param templateId                the template id we want to delete.
+	 * @return the document without the deleted layout template.
+	 */
+	public static Try<Document> removeLayoutTemplate(final String liferayLayoutTemplatesXml, final String templateId) {
+		final Try<Document> document = Try.of(() ->
+				SAXReaderUtil.read(liferayLayoutTemplatesXml)
+		);
+
+		if (document.isFailure()) {
+			return Try.failure(document.getCause());
+		}
+
+		final Element customElement = document.get().getRootElement().element(CUSTOM_ELEMENT);
+
+		customElement.elements(LAYOUT_TEMPLATE).forEach(element -> {
+			final String elementId = element.attribute(ID).getValue();
+			if (elementId.equals(templateId)) {
+				customElement.remove(element);
+			}
+		});
+
+		return document;
 	}
 
 	private static Try<Document> parseXml(final String liferayLayoutTemplatesXml) {

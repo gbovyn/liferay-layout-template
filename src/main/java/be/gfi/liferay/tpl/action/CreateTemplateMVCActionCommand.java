@@ -29,9 +29,6 @@ import java.nio.file.Path;
 public class CreateTemplateMVCActionCommand extends BaseMVCActionCommand {
 	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	private static final String TPL_EXT = ".tpl";
-	private static final String PNG_EXT = ".png";
-
 	private ConfigurationHelper configurationHelper;
 
 	@Override
@@ -40,8 +37,8 @@ public class CreateTemplateMVCActionCommand extends BaseMVCActionCommand {
 		final String name = actionRequest.getParameter("name");
 		final String content = actionRequest.getParameter("content");
 
-		final String templatePath = id.replace('-', '_') + TPL_EXT;
-		final String thumbnailPath = id.replace('-', '_') + PNG_EXT;
+		final String templatePath = LayoutTemplateUtil.getTemplatePath(id);
+		final String thumbnailPath = LayoutTemplateUtil.getThumbnailPath(id);
 
 		final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
 

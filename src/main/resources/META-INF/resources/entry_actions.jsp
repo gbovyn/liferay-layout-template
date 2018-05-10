@@ -26,10 +26,12 @@
         url="<%= editLayoutTemplateURL %>"
     />
 
-    <portlet:actionURL name="deleteLayoutTemplate" var="deleteLayoutTemplateURL">
+    <portlet:actionURL name="/tpl/delete_template" var="deleteLayoutTemplateURL">
         <portlet:param name="redirect" value="<%= currentURL %>" />
-        <portlet:param name="layoutTemplatePath" value="<%= String.valueOf(layoutTemplate.getTemplatePath()) %>" />
-        <portlet:param name="layoutThumbnailPath" value="<%= String.valueOf(layoutTemplate.getThumbnailPath()) %>" />
+        <portlet:param name="id" value="<%= String.valueOf(layoutTemplate.getId()) %>" />
+        <portlet:param name="name" value="<%= String.valueOf(layoutTemplate.getName()) %>" />
+        <portlet:param name="templatePath" value="<%= String.valueOf(layoutTemplate.getTemplatePath()) %>" />
+        <portlet:param name="thumbnailPath" value="<%= String.valueOf(layoutTemplate.getThumbnailPath()) %>" />
     </portlet:actionURL>
 
     <liferay-ui:icon
