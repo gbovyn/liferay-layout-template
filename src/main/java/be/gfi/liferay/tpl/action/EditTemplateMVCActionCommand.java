@@ -34,16 +34,6 @@ public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
 		final String name = actionRequest.getParameter("name");
 		final String content = actionRequest.getParameter("content");
 
-//		// TODO refactor
-//		final Try delete = LayoutTemplateUtil.deleteFileFromZip(getLayoutTemplateWarPath(), name);
-//		if (delete.isFailure()) {
-//			SessionErrors.add(actionRequest, "delete-error");
-//		}
-//		final Try update = LayoutTemplateUtil.addFileInZip(getLayoutTemplateWarPath(), name, content);
-//		if (update.isFailure()) {
-//			SessionErrors.add(actionRequest, "update-error");
-//		}
-
 		final Try<Path> tryToUpdate = ZipUtil.writeFileToZip(
 				LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"), name, content // TODO use configuration
 		);

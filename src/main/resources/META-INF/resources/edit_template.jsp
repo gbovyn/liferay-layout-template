@@ -6,8 +6,10 @@
 	portletDisplay.setShowBackIcon(true);
 	portletDisplay.setURLBack(redirect);
 
-    ZipEntry layoutTemplate = (ZipEntry) request.getAttribute("layoutTemplate");
-	String templateContent = (String) request.getAttribute("templateContent");
+    String layoutTemplateName = (String) request.getAttribute("layoutTemplateName");
+    String layoutTemplateCreationTime = (String) request.getAttribute("layoutTemplateCreationTime");
+    String layoutTemplateSize = (String) request.getAttribute("layoutTemplateSize");
+	String layoutTemplateContent = (String) request.getAttribute("layoutTemplateContent");
 %>
 
 <div class="container-fluid-1280">
@@ -25,16 +27,19 @@
 
 			<div class="row">
 				<div class="col-md-6">
-			        <aui:input readonly="<%= true %>" name="name" value="<%= (layoutTemplate != null) ? layoutTemplate.getName() : StringPool.BLANK %>" />
+			        <aui:input readonly="<%= true %>" name="name" value="<%= layoutTemplateName %>" />
 				</div>
-                <div class="col-md-6">
-                    <aui:input readonly="<%= true %>" name="last-modified-time" value="<%= (layoutTemplate != null) ? layoutTemplate.getLastModifiedTime() : StringPool.BLANK %>" />
+				<div class="col-md-2">
+                    <aui:input readonly="<%= true %>" name="size" value="<%= layoutTemplateSize %>" />
+                </div>
+                <div class="col-md-4">
+                    <aui:input readonly="<%= true %>" name="creation-time" value="<%= layoutTemplateCreationTime %>" />
                 </div>
             </div>
 
 			<div class="row">
 			    <div class="col-md-12">
-                    <aui:input name="content" type="textarea" value="<%= (templateContent != null) ? templateContent : StringPool.BLANK %>" />
+                    <aui:input name="content" type="textarea" value="<%= layoutTemplateContent %>" />
                 </div>
 			</div>
 

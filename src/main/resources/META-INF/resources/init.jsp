@@ -9,8 +9,11 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.zip.ZipEntry" %>
+<%@ page import="java.nio.file.Path" %>
+<%@ page import="java.nio.file.attribute.BasicFileAttributes" %>
 <%@ page import="javax.portlet.PortletURL" %>
+
+<%@ page import="com.liferay.portal.kernel.dao.search.ResultRow" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
 <%@ page import="com.liferay.portal.kernel.util.ListUtil" %>
@@ -18,7 +21,7 @@
 <%@ page import="com.liferay.portal.kernel.util.PortalUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 <%@ page import="com.liferay.portal.kernel.util.WebKeys" %>
-<%@ page import="com.liferay.portal.kernel.dao.search.ResultRow" %>
+
 <%@ page import="be.gfi.liferay.tpl.model.LayoutTemplate" %>
 
 <liferay-theme:defineObjects />
