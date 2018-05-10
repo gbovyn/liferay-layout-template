@@ -8,11 +8,16 @@ import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import io.vavr.control.Try;
 import org.w3c.dom.NamedNodeMap;
 
-import java.io.InputStream;
-
 public class XmlUtil {
 
-	public static Try<Element> getCustomElement(final Try<InputStream> liferayLayoutTemplatesXml) {
+	private static final String CUSTOM_ELEMENT = "custom";
+	private static final String LAYOUT_TEMPLATE = "layout-template";
+	private static final String ID = "id";
+	private static final String NAME = "name";
+	private static final String TEMPLATE_PATH = "template-path";
+	private static final String THUMBNAIL_PATH = "thumbnail-path";
+
+	public static Try<Element> getCustomElement(final Try<String> liferayLayoutTemplatesXml) {
 		if (liferayLayoutTemplatesXml.isFailure()) {
 			return Try.failure(liferayLayoutTemplatesXml.getCause());
 		}
@@ -28,16 +33,20 @@ public class XmlUtil {
 		return Try.success(rootElement.element("custom"));
 	}
 
-	public static Try addCustomLayoutTemplate(final Try<InputStream> liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
-		final Try<Document> document = Try.withResources(liferayLayoutTemplatesXml::get).of(
-				SAXReaderUtil::read
+	public static Try addCustomLayoutTemplate(final Try<String> liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
+		if (liferayLayoutTemplatesXml.isFailure()) {
+			return Try.failure(liferayLayoutTemplatesXml.getCause());
+		}
+
+		final Try<Document> document = Try.of(() ->
+				SAXReaderUtil.read(liferayLayoutTemplatesXml.get())
 		);
 
 		if (document.isFailure()) {
 			return Try.failure(document.getCause());
 		}
 
-		final Element customElement = document.get().getRootElement().element("custom");
+		final Element customElement = document.get().getRootElement().element(CUSTOM_ELEMENT);
 
 		customElement.add(
 				createCustomLayoutTemplate(layoutTemplate)
@@ -47,15 +56,15 @@ public class XmlUtil {
 	}
 
 	public static Element createCustomLayoutTemplate(final LayoutTemplate layoutTemplate) {
-		final Element layoutTemplateElement = SAXReaderUtil.createElement("layout-template");
+		final Element layoutTemplateElement = SAXReaderUtil.createElement(LAYOUT_TEMPLATE);
 
-		layoutTemplateElement.addAttribute("id", layoutTemplate.getId());
-		layoutTemplateElement.addAttribute("name", layoutTemplate.getName());
+		layoutTemplateElement.addAttribute(ID, layoutTemplate.getId());
+		layoutTemplateElement.addAttribute(NAME, layoutTemplate.getName());
 
-		final Element templatePath = SAXReaderUtil.createElement("template-path");
+		final Element templatePath = SAXReaderUtil.createElement(TEMPLATE_PATH);
 		templatePath.addText(layoutTemplate.getTemplatePath());
 
-		final Element thumbnailPath = SAXReaderUtil.createElement("thumbnail-path");
+		final Element thumbnailPath = SAXReaderUtil.createElement(THUMBNAIL_PATH);
 		thumbnailPath.addText(layoutTemplate.getThumbnailPath());
 
 		layoutTemplateElement.add(templatePath);
@@ -64,9 +73,9 @@ public class XmlUtil {
 		return layoutTemplateElement;
 	}
 
-	public static Try<Document> parseXml(final InputStream liferayLayoutTemplatesXml) {
-		return Try.withResources(() -> liferayLayoutTemplatesXml).of(
-				UnsecureSAXReaderUtil::read
+	public static Try<Document> parseXml(final String liferayLayoutTemplatesXml) {
+		return Try.of(() ->
+				UnsecureSAXReaderUtil.read(liferayLayoutTemplatesXml)
 		);
 	}
 

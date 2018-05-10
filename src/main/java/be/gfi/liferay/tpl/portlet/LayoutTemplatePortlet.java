@@ -1,10 +1,10 @@
 package be.gfi.liferay.tpl.portlet;
 
-import aQute.bnd.annotation.metatype.Configurable;
 import be.gfi.liferay.tpl.configuration.LayoutTemplateConfiguration;
 import be.gfi.liferay.tpl.constants.LayoutTemplatePortletKeys;
 import be.gfi.liferay.tpl.model.LayoutTemplate;
 import be.gfi.liferay.tpl.util.LayoutTemplateUtil;
+import be.gfi.liferay.tpl.util.LiferayUtil;
 import com.liferay.portal.configuration.metatype.bnd.util.ConfigurableUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import io.vavr.control.Try;
@@ -12,12 +12,11 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 
-import javax.portlet.*;
+import javax.portlet.Portlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,19 +40,13 @@ public class LayoutTemplatePortlet extends MVCPortlet {
 
 	private volatile LayoutTemplateConfiguration configuration;
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		configuration = ConfigurableUtil.createConfigurable(
-				LayoutTemplateConfiguration.class, properties
-		);
-	}
-
 	@Override
 	public void doView(final RenderRequest renderRequest, final RenderResponse renderResponse) throws IOException, PortletException {
 		String warName = getLayoutTemplateWarName();
 
-		final Try<List<LayoutTemplate>> customLayoutTemplates = LayoutTemplateUtil.getCustomLayoutTemplates(warName);
+		final Try<List<LayoutTemplate>> customLayoutTemplates = LayoutTemplateUtil.getCustomLayoutTemplates(
+				LiferayUtil.getOsgiWarFolder().resolve(warName)
+		);
 
 		renderRequest.setAttribute("templates", customLayoutTemplates.isSuccess()
 				? customLayoutTemplates.get()
@@ -63,8 +56,15 @@ public class LayoutTemplatePortlet extends MVCPortlet {
 		super.doView(renderRequest, renderResponse);
 	}
 
-	private String getLayoutTemplateWarName() {
-		return configuration.warName(); // "my-liferay-layout-layouttpl.war";//StringPool.BLANK;
+	@Activate
+	@Modified
+	protected void activate(Map<String, Object> properties) {
+		configuration = ConfigurableUtil.createConfigurable(
+				LayoutTemplateConfiguration.class, properties
+		);
 	}
 
+	private String getLayoutTemplateWarName() {
+		return configuration.warName();
+	}
 }

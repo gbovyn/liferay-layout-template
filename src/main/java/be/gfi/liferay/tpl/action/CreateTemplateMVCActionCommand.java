@@ -3,6 +3,7 @@ package be.gfi.liferay.tpl.action;
 import be.gfi.liferay.tpl.constants.LayoutTemplatePortletKeys;
 import be.gfi.liferay.tpl.model.LayoutTemplate;
 import be.gfi.liferay.tpl.util.LayoutTemplateUtil;
+import be.gfi.liferay.tpl.util.LiferayUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -32,7 +33,9 @@ public class CreateTemplateMVCActionCommand extends BaseMVCActionCommand {
 
 		final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
 
-		final Try createTry = LayoutTemplateUtil.createCustomLayoutTemplate("my-liferay-layout-layouttpl.war", layoutTemplate, content);
+		final Try createTry = LayoutTemplateUtil.createLayoutTemplate(
+				LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"), layoutTemplate, content
+		);
 
 		if (createTry.isFailure()) {
 			SessionErrors.add(actionRequest, "error", createTry.getCause());

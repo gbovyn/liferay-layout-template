@@ -1,17 +1,20 @@
 package be.gfi.liferay.tpl.action;
 
 import be.gfi.liferay.tpl.constants.LayoutTemplatePortletKeys;
-import be.gfi.liferay.tpl.util.LayoutTemplateUtil;
+import be.gfi.liferay.tpl.util.LiferayUtil;
+import be.gfi.liferay.tpl.util.ZipUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.util.ParamUtil;
 import io.vavr.control.Try;
 import org.osgi.service.component.annotations.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 @Component(
 		immediate = true,
@@ -22,6 +25,8 @@ import java.nio.file.Paths;
 		service = MVCActionCommand.class
 )
 public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
+	private static Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
+
 	@Override
 	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
 		final String redirect = ParamUtil.getString(actionRequest, "redirect");
@@ -29,25 +34,23 @@ public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
 		final String name = actionRequest.getParameter("name");
 		final String content = actionRequest.getParameter("content");
 
-		// TODO refactor
-		final Try delete = LayoutTemplateUtil.deleteFileFromZip(getLayoutTemplateWarPath(), name);
-		if (delete.isFailure()) {
-			SessionErrors.add(actionRequest, "delete-error");
-		}
-		final Try update = LayoutTemplateUtil.addFileInZip(getLayoutTemplateWarPath(), name, content);
-		if (update.isFailure()) {
-			SessionErrors.add(actionRequest, "update-error");
-		}
-	}
+//		// TODO refactor
+//		final Try delete = LayoutTemplateUtil.deleteFileFromZip(getLayoutTemplateWarPath(), name);
+//		if (delete.isFailure()) {
+//			SessionErrors.add(actionRequest, "delete-error");
+//		}
+//		final Try update = LayoutTemplateUtil.addFileInZip(getLayoutTemplateWarPath(), name, content);
+//		if (update.isFailure()) {
+//			SessionErrors.add(actionRequest, "update-error");
+//		}
 
-	private String getLayoutTemplateWarPath() {
-		return Paths.get(
-				LayoutTemplateUtil.getOsgiWarFolder().toString(),
-				getLayoutTemplateWarName()
-		).toString().replace('\\', '/'); // TODO cleaner
-	}
+		final Try<Path> tryToUpdate = ZipUtil.writeFileToZip(
+				LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"), name, content // TODO use configuration
+		);
 
-	private String getLayoutTemplateWarName() {
-		return "my-liferay-layout-layouttpl.war"; // TODO use configuration
+		if (tryToUpdate.isFailure()) {
+			SessionErrors.add(actionRequest, "error", tryToUpdate.getCause());
+			logger.error(tryToUpdate.getCause().getMessage());
+		}
 	}
 }
