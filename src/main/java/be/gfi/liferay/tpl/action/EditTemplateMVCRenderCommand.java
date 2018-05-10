@@ -38,7 +38,7 @@ public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
 	@Override
 	public String render(final RenderRequest renderRequest, final RenderResponse renderResponse) {
 		final String layoutTemplatePath = renderRequest.getParameter("layoutTemplatePath");
-		final Path layoutTemplateWar = LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war");
+		final Path layoutTemplateWar = LiferayUtil.getOsgiWarFolder().resolve("my-liferay-layout-layouttpl.war"); // TODO
 
 		final Try<Path> layoutTemplate = ZipUtil.getFileFromZip(layoutTemplateWar, layoutTemplatePath);
 		final Try<BasicFileAttributes> layoutTemplateAttributes = ZipUtil.getFileAttributesFromZip(layoutTemplateWar, layoutTemplatePath);
@@ -49,10 +49,10 @@ public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
 						? layoutTemplate.get().toString()
 						: StringPool.BLANK
 		);
-		renderRequest.setAttribute("layoutTemplateCreationTime",
+		renderRequest.setAttribute("layoutTemplateLastModifiedTime",
 				layoutTemplateAttributes.isSuccess() ?
 						getFormattedDateFromFileTime(
-								layoutTemplateAttributes.get().creationTime(),
+								layoutTemplateAttributes.get().lastModifiedTime(),
 								getUserZoneId(renderRequest),
 								getUserLocale(renderRequest)
 						) : StringPool.BLANK
@@ -73,7 +73,7 @@ public class EditTemplateMVCRenderCommand implements MVCRenderCommand {
 
 	private String getFormattedDateFromFileTime(FileTime time, ZoneId userZoneId, Locale userLocale) {
 		final ZonedDateTime localDateTimeDate = ZonedDateTime.ofInstant(
-				Instant.ofEpochMilli(time.toMillis()), ZoneId.systemDefault()
+				Instant.ofEpochMilli(time.toMillis()), userZoneId
 		);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withLocale(userLocale);

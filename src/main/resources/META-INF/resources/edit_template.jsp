@@ -7,7 +7,7 @@
 	portletDisplay.setURLBack(redirect);
 
     String layoutTemplateName = (String) request.getAttribute("layoutTemplateName");
-    String layoutTemplateCreationTime = (String) request.getAttribute("layoutTemplateCreationTime");
+    String layoutTemplateLastModifiedTime = (String) request.getAttribute("layoutTemplateLastModifiedTime");
     String layoutTemplateSize = (String) request.getAttribute("layoutTemplateSize");
 	String layoutTemplateContent = (String) request.getAttribute("layoutTemplateContent");
 %>
@@ -33,7 +33,7 @@
                     <aui:input readonly="<%= true %>" name="size" value="<%= layoutTemplateSize %>" />
                 </div>
                 <div class="col-md-4">
-                    <aui:input readonly="<%= true %>" name="creation-time" value="<%= layoutTemplateCreationTime %>" />
+                    <aui:input readonly="<%= true %>" name="last-modified-time" value="<%= layoutTemplateLastModifiedTime %>" />
                 </div>
             </div>
 

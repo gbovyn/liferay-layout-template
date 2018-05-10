@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.Map;
 
@@ -39,10 +42,20 @@ public class ZipUtil {
 	}
 
 	public static Try<Path> writeFileToZip(final Path zipPath, final String filename, final String content) {
-		return Try.withResources(() -> getZipAsFileSystem(zipPath)).of(fs ->
-				Files.write(
-						fs.getPath(filename), content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING
-				)
+		return Try.withResources(() -> getZipAsFileSystem(zipPath)).of(fs -> {
+					final Path path = Files.write(
+							fs.getPath(filename), content.getBytes(), StandardOpenOption.TRUNCATE_EXISTING
+					);
+
+					Files.setLastModifiedTime(
+							fs.getPath(filename),
+							FileTime.fromMillis(
+									LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli()
+							)
+					);
+
+					return path;
+				}
 		);
 	}
 
