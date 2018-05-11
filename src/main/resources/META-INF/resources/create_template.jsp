@@ -10,35 +10,6 @@
 <portlet:resourceURL id="/tpl/existing_ids" var="existingIdsURL" />
 <portlet:resourceURL id="/tpl/existing_names" var="existingNamesURL" />
 
-<script>
-var isValidId = function (val) {
-    return !alreadyExist('<%= existingIdsURL %>', val);
-}
-
-var isValidName = function (val) {
-    return !alreadyExist('<%= existingNamesURL %>', val);
-}
-
-var alreadyExist = function (url, val) {
-    var valid = false;
-
-    jQuery.ajax({
-        url: url,
-        dataType: 'json',
-        method: 'GET',
-        async: false,
-        success: function (response) {
-            valid = response.includes(val);
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
-
-    return valid;
-}
-</script>
-
 <div class="container-fluid-1280">
 
     <portlet:actionURL name="/tpl/create_template" var="createLayoutTemplateURL">
@@ -57,7 +28,7 @@ var alreadyExist = function (url, val) {
                         <aui:validator name="required" />
                         <aui:validator errorMessage="Name must be unique." name="custom">
                             function(val, fieldNode, ruleValue) {
-                                return isValidName(val);
+                                return isValidName('<%= existingNamesURL %>', val);
                             }
                         </aui:validator>
                     </aui:input>
@@ -67,7 +38,7 @@ var alreadyExist = function (url, val) {
                         <aui:validator name="required" />
                         <aui:validator errorMessage="Id must be unique." name="custom">
                             function(val, fieldNode, ruleValue) {
-                                return isValidId(val);
+                                return isValidId('<%= existingIdsURL %>', val);
                             }
                         </aui:validator>
                     </aui:input>
@@ -91,3 +62,9 @@ var alreadyExist = function (url, val) {
 	</aui:form>
 
 </div>
+
+<script>
+    Liferay.on('allPortletsReady', function () {
+        generateIdOnInputChange('<portlet:namespace />');
+    });
+</script>

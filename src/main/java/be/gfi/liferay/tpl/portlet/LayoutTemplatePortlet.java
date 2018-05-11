@@ -27,6 +27,7 @@ import java.util.Map;
 		property = {
 				"com.liferay.portlet.display-category=category.sample",
 				"com.liferay.portlet.instanceable=true",
+				"com.liferay.portlet.footer-portlet-javascript=/js/validation.js",
 				"javax.portlet.display-name=Layout Template Portlet",
 				"javax.portlet.init-param.template-path=/",
 				"javax.portlet.init-param.view-template=/view.jsp",
