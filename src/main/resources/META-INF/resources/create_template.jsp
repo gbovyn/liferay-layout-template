@@ -7,6 +7,38 @@
 	portletDisplay.setURLBack(redirect);
 %>
 
+<portlet:resourceURL id="/tpl/existing_ids" var="existingIdsURL" />
+<portlet:resourceURL id="/tpl/existing_names" var="existingNamesURL" />
+
+<script>
+var isValidId = function (val) {
+    return !alreadyExist('<%= existingIdsURL %>', val);
+}
+
+var isValidName = function (val) {
+    return !alreadyExist('<%= existingNamesURL %>', val);
+}
+
+var alreadyExist = function (url, val) {
+    var valid = false;
+
+    jQuery.ajax({
+        url: url,
+        dataType: 'json',
+        method: 'GET',
+        async: false,
+        success: function (response) {
+            valid = response.includes(val);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
+    return valid;
+}
+</script>
+
 <div class="container-fluid-1280">
 
     <portlet:actionURL name="/tpl/create_template" var="createLayoutTemplateURL">
@@ -21,15 +53,25 @@
 
 			<div class="row">
 			    <div class="col-md-6">
-                    <aui:input name="id" value="<%= StringPool.BLANK %>">
+                    <aui:input name="name" value="<%= StringPool.BLANK %>">
                         <aui:validator name="required" />
+                        <aui:validator errorMessage="Name must be unique." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                return isValidName(val);
+                            }
+                        </aui:validator>
                     </aui:input>
                 </div>
-				<div class="col-md-6">
-			        <aui:input name="name" value="<%= StringPool.BLANK %>">
-			            <aui:validator name="required" />
-			        </aui:input>
-				</div>
+			    <div class="col-md-6">
+                    <aui:input name="id" value="<%= StringPool.BLANK %>">
+                        <aui:validator name="required" />
+                        <aui:validator errorMessage="Id must be unique." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                return isValidId(val);
+                            }
+                        </aui:validator>
+                    </aui:input>
+                </div>
             </div>
 
 			<div class="row">

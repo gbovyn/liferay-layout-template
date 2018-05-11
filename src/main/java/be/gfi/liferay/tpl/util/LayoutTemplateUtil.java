@@ -7,7 +7,9 @@ import io.vavr.control.Try;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LayoutTemplateUtil {
 
@@ -132,13 +134,43 @@ public class LayoutTemplateUtil {
 			return Try.failure(tryToUpdateXmlConfig.getCause());
 		}
 
-		final Try tryToDeleteZip = ZipUtil.deleteFileFromZip(zipPath, layoutTemplate.getTemplatePath());
+		final Try tryToDeleteTemplate = ZipUtil.deleteFileFromZip(zipPath, layoutTemplate.getTemplatePath());
 
-		if (tryToDeleteZip.isFailure()) {
-			return Try.failure(tryToDeleteZip.getCause());
+		if (tryToDeleteTemplate.isFailure()) {
+			return Try.failure(tryToDeleteTemplate.getCause());
+		}
+
+		final Try tryToDeleteThumbnail = ZipUtil.deleteFileFromZip(zipPath, layoutTemplate.getThumbnailPath());
+
+		if (tryToDeleteThumbnail.isFailure()) {
+			return Try.failure(tryToDeleteThumbnail.getCause());
 		}
 
 		return Try.success(layoutTemplate);
+	}
+
+	public static List<String> getExistingTemplateIds(final Path zipPath) {
+		final Try<List<LayoutTemplate>> layoutTemplates = getCustomLayoutTemplates(zipPath);
+
+		if (layoutTemplates.isFailure()) {
+			return Collections.emptyList();
+		}
+
+		return layoutTemplates.get().stream()
+				.map(LayoutTemplate::getId)
+				.collect(Collectors.toList());
+	}
+
+	public static List<String> getExistingTemplateNames(final Path zipPath) {
+		final Try<List<LayoutTemplate>> layoutTemplates = getCustomLayoutTemplates(zipPath);
+
+		if (layoutTemplates.isFailure()) {
+			return Collections.emptyList();
+		}
+
+		return layoutTemplates.get().stream()
+				.map(LayoutTemplate::getName)
+				.collect(Collectors.toList());
 	}
 
 	public static String getTemplatePath(final String id) {
