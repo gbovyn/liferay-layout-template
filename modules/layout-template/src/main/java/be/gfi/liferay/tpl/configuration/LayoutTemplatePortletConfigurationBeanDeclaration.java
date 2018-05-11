@@ -4,8 +4,8 @@ import com.liferay.portal.kernel.settings.definition.ConfigurationBeanDeclaratio
 
 public class LayoutTemplatePortletConfigurationBeanDeclaration implements ConfigurationBeanDeclaration {
 
-	@Override
-	public Class getConfigurationBeanClass() {
-		return LayoutTemplateConfiguration.class;
-	}
+    @Override
+    public Class getConfigurationBeanClass() {
+        return LayoutTemplateConfiguration.class;
+    }
 }

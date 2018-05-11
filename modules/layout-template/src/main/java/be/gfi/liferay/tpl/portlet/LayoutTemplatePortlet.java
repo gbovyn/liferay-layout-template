@@ -22,50 +22,50 @@ import java.util.List;
 import java.util.Map;
 
 @Component(
-		configurationPid = "be.gfi.liferay.tpl.configuration.LayoutTemplateConfiguration",
-		immediate = true,
-		property = {
-				"com.liferay.portlet.display-category=category.sample",
-				"com.liferay.portlet.instanceable=true",
-				"javax.portlet.display-name=Layout Template Portlet",
-				"javax.portlet.init-param.template-path=/",
-				"javax.portlet.init-param.view-template=/view.jsp",
-				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
-				"javax.portlet.resource-bundle=content.Language",
-				"javax.portlet.security-role-ref=power-user,user",
-				"com.liferay.portlet.footer-portlet-javascript=/js/validation.js"
-		},
-		service = Portlet.class
+        configurationPid = "be.gfi.liferay.tpl.configuration.LayoutTemplateConfiguration",
+        immediate = true,
+        property = {
+                "com.liferay.portlet.display-category=category.sample",
+                "com.liferay.portlet.instanceable=true",
+                "javax.portlet.display-name=Layout Template Portlet",
+                "javax.portlet.init-param.template-path=/",
+                "javax.portlet.init-param.view-template=/view.jsp",
+                "javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
+                "javax.portlet.resource-bundle=content.Language",
+                "javax.portlet.security-role-ref=power-user,user",
+                "com.liferay.portlet.footer-portlet-javascript=/js/validation.js"
+        },
+        service = Portlet.class
 )
 public class LayoutTemplatePortlet extends MVCPortlet {
 
-	private volatile LayoutTemplateConfiguration configuration;
+    private volatile LayoutTemplateConfiguration configuration;
 
-	@Override
-	public void doView(final RenderRequest renderRequest, final RenderResponse renderResponse) throws IOException, PortletException {
-		String warName = getLayoutTemplateWarName();
+    @Override
+    public void doView(final RenderRequest renderRequest, final RenderResponse renderResponse) throws IOException, PortletException {
+        String warName = getLayoutTemplateWarName();
 
-		final Try<List<LayoutTemplate>> customLayoutTemplates = LayoutTemplateUtil.getCustomLayoutTemplates(
-				LiferayUtil.getOsgiWarFolder().resolve(warName)
-		);
+        final Try<List<LayoutTemplate>> customLayoutTemplates = LayoutTemplateUtil.getCustomLayoutTemplates(
+                LiferayUtil.getOsgiWarFolder().resolve(warName)
+        );
 
-		renderRequest.setAttribute("templates", customLayoutTemplates.isSuccess()
-				? customLayoutTemplates.get()
-				: Collections.emptyList()
-		);
+        renderRequest.setAttribute("templates", customLayoutTemplates.isSuccess()
+                ? customLayoutTemplates.get()
+                : Collections.emptyList()
+        );
 
-		super.doView(renderRequest, renderResponse);
-	}
+        super.doView(renderRequest, renderResponse);
+    }
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		configuration = ConfigurableUtil.createConfigurable(
-				LayoutTemplateConfiguration.class, properties
-		);
-	}
+    @Activate
+    @Modified
+    protected void activate(Map<String, Object> properties) {
+        configuration = ConfigurableUtil.createConfigurable(
+                LayoutTemplateConfiguration.class, properties
+        );
+    }
 
-	private String getLayoutTemplateWarName() {
-		return configuration.warName();
-	}
+    private String getLayoutTemplateWarName() {
+        return configuration.warName();
+    }
 }
