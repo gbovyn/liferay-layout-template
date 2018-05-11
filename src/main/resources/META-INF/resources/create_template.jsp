@@ -22,62 +22,63 @@
 		<aui:fieldset-group markupView="lexicon">
 			<aui:fieldset>
 
-			<div class="row">
-			    <div class="col-md-6">
-                    <aui:input name="name" value="<%= StringPool.BLANK %>">
-                        <aui:validator name="required" />
-                        <aui:validator errorMessage="Name must be unique." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                return isValidName(val);
-                            }
-                        </aui:validator>
-                        <aui:validator errorMessage="Only alphanumeric, space and dash characters are allowed." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                var regex = new RegExp(/^[a-zA-Z0-9-\s]+$/i);
+                <div class="row">
+                    <div class="col-md-6">
+                        <aui:input name="name" value="<%= StringPool.BLANK %>">
+                            <aui:validator name="required" />
+                            <aui:validator errorMessage="Name must be unique." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    return isValidName(val);
+                                }
+                            </aui:validator>
+                            <aui:validator errorMessage="Only alphanumeric, space and dash characters are allowed." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    var regex = new RegExp(/^[a-zA-Z0-9-\s]+$/i);
 
-                                return regex.test(val);
-                            }
-                        </aui:validator>
-                        <aui:validator errorMessage="The name cannot start or end with a dash." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                var regex = new RegExp(/^(?!-).*(?<!-)$/i);
+                                    return regex.test(val);
+                                }
+                            </aui:validator>
+                            <aui:validator errorMessage="The name cannot start or end with a dash." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    var regex = new RegExp(/^(?!-).*(?<!-)$/i);
 
-                                return regex.test(val);
-                            }
-                        </aui:validator>
-                    </aui:input>
+                                    return regex.test(val);
+                                }
+                            </aui:validator>
+                        </aui:input>
+                    </div>
+
+                    <div class="col-md-6">
+                        <aui:input name="id" value="<%= StringPool.BLANK %>">
+                            <aui:validator name="required" />
+                            <aui:validator errorMessage="Id must be unique." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    return isValidId(val);
+                                }
+                            </aui:validator>
+                            <aui:validator errorMessage="Only the alphanumeric and the dash characters are allowed." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    var regex = new RegExp(/^[a-zA-Z0-9-]+$/i);
+
+                                    return regex.test(val);
+                                }
+                            </aui:validator>
+                            <aui:validator errorMessage="The id cannot start or end with a dash." name="custom">
+                                function(val, fieldNode, ruleValue) {
+                                    var regex = new RegExp(/^(?!-).*(?<!-)$/i);
+
+                                    return regex.test(val);
+                                }
+                            </aui:validator>
+                        </aui:input>
+                    </div>
                 </div>
-			    <div class="col-md-6">
-                    <aui:input name="id" value="<%= StringPool.BLANK %>">
-                        <aui:validator name="required" />
-                        <aui:validator errorMessage="Id must be unique." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                return isValidId(val);
-                            }
-                        </aui:validator>
-                        <aui:validator errorMessage="Only the alphanumeric and the dash characters are allowed." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                var regex = new RegExp(/^[a-zA-Z0-9-]+$/i);
 
-                                return regex.test(val);
-                            }
-                        </aui:validator>
-                        <aui:validator errorMessage="The id cannot start or end with a dash." name="custom">
-                            function(val, fieldNode, ruleValue) {
-                                var regex = new RegExp(/^(?!-).*(?<!-)$/i);
-
-                                return regex.test(val);
-                            }
-                        </aui:validator>
-                    </aui:input>
+                <div class="row">
+                    <div class="col-md-12">
+                        <aui:input name="content" type="textarea" value="<%= StringPool.BLANK %>" />
+                    </div>
                 </div>
-            </div>
-
-			<div class="row">
-			    <div class="col-md-12">
-                    <aui:input name="content" type="textarea" value="<%= StringPool.BLANK %>" />
-                </div>
-			</div>
 
 			</aui:fieldset>
 		</aui:fieldset-group>

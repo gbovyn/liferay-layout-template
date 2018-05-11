@@ -25,12 +25,12 @@ AUI.add(
                         var namespace = instance.get('namespace');
 
                         jQuery('#' + namespace + 'name').on('input', function (e) {
-                           var name = jQuery(this).val();
-                           if (name) {
-                               var id = name.trim().toLowerCase().replace(/\s+/g, '-');
+                            var name = jQuery(this).val();
+                            if (name) {
+                                var id = name.trim().toLowerCase().replace(/\s+/g, '-');
 
-                               jQuery('#' + namespace + 'id').val(id);
-                           }
+                                jQuery('#' + namespace + 'id').val(id);
+                            }
                         });
                     },
 
