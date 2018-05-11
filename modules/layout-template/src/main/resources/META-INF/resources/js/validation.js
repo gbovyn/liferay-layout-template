@@ -26,11 +26,13 @@ AUI.add(
 
                         jQuery('#' + namespace + 'name').on('input', function (e) {
                             var name = jQuery(this).val();
-                            if (name) {
-                                var id = name.trim().toLowerCase().replace(/\s+/g, '-');
+                            var id = '';
 
-                                jQuery('#' + namespace + 'id').val(id);
+                            if (name) {
+                                id = name.trim().toLowerCase().replace(/\s+/g, '-');
                             }
+
+                            jQuery('#' + namespace + 'id').val(id);
                         });
                     },
 

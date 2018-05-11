@@ -56,7 +56,7 @@
                                     return isValidId(val);
                                 }
                             </aui:validator>
-                            <aui:validator errorMessage="Only the alphanumeric and the dash characters are allowed." name="custom">
+                            <aui:validator errorMessage="Only alphanumeric and dash characters are allowed." name="custom">
                                 function(val, fieldNode, ruleValue) {
                                     var regex = new RegExp(/^[a-zA-Z0-9-]+$/i);
 
