@@ -1,10 +1,10 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	String redirect = ParamUtil.getString(request, "redirect");
+    String redirect = ParamUtil.getString(request, "redirect");
 
-	portletDisplay.setShowBackIcon(true);
-	portletDisplay.setURLBack(redirect);
+    portletDisplay.setShowBackIcon(true);
+    portletDisplay.setURLBack(redirect);
 %>
 
 <portlet:resourceURL id="/tpl/existing_ids" var="existingIdsURL" />
@@ -16,11 +16,11 @@
             <portlet:param name="redirect" value="<%= currentURL %>" />
     </portlet:actionURL>
 
-	<aui:form action="<%= createLayoutTemplateURL %>" method="post" name="fm">
-		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+    <aui:form action="<%= createLayoutTemplateURL %>" method="post" name="fm">
+        <aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 
-		<aui:fieldset-group markupView="lexicon">
-			<aui:fieldset>
+        <aui:fieldset-group markupView="lexicon">
+            <aui:fieldset>
 
                 <div class="row">
                     <div class="col-md-6">
@@ -80,15 +80,15 @@
                     </div>
                 </div>
 
-			</aui:fieldset>
-		</aui:fieldset-group>
+            </aui:fieldset>
+        </aui:fieldset-group>
 
-		<aui:button-row>
-			<aui:button type="submit" />
+        <aui:button-row>
+            <aui:button type="submit" />
 
-			<aui:button href="<%= redirect %>" type="cancel" />
-		</aui:button-row>
-	</aui:form>
+            <aui:button href="<%= redirect %>" type="cancel" />
+        </aui:button-row>
+    </aui:form>
 
 </div>
 

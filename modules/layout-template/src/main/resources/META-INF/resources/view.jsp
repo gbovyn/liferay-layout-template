@@ -1,13 +1,13 @@
 <%@ include file="/init.jsp" %>
 
 <%
-	PortletURL iteratorURL = renderResponse.createRenderURL();
-	List<LayoutTemplate> templates = (List<LayoutTemplate>) request.getAttribute("templates");
+    PortletURL iteratorURL = renderResponse.createRenderURL();
+    List<LayoutTemplate> templates = (List<LayoutTemplate>) request.getAttribute("templates");
 %>
 
 <div class="container-fluid-1280">
-	<div class="card main-content-card">
-		<div class="card-row card-row-padded">
+    <div class="card main-content-card">
+        <div class="card-row card-row-padded">
             <liferay-ui:search-container
                     delta="5"
                     emptyResultsMessage="No layout template found"

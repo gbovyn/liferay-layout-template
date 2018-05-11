@@ -7,12 +7,12 @@
 %>
 
 <liferay-ui:icon-menu
-	cssClass="dropdown-menu-indicator-end"
-	direction="left-side"
-	icon="<%= StringPool.BLANK %>"
-	markupView="lexicon"
-	message="<%= StringPool.BLANK %>"
-	showWhenSingleIcon="<%= true %>"
+    cssClass="dropdown-menu-indicator-end"
+    direction="left-side"
+    icon="<%= StringPool.BLANK %>"
+    markupView="lexicon"
+    message="<%= StringPool.BLANK %>"
+    showWhenSingleIcon="<%= true %>"
 >
 
     <portlet:renderURL var="editLayoutTemplateURL">
