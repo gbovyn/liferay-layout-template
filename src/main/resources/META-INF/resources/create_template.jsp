@@ -28,7 +28,7 @@
                         <aui:validator name="required" />
                         <aui:validator errorMessage="Name must be unique." name="custom">
                             function(val, fieldNode, ruleValue) {
-                                return isValidName('<%= existingNamesURL %>', val);
+                                return isValidName(val);
                             }
                         </aui:validator>
                         <aui:validator errorMessage="Only alphanumeric, space and dash characters are allowed." name="custom">
@@ -52,7 +52,7 @@
                         <aui:validator name="required" />
                         <aui:validator errorMessage="Id must be unique." name="custom">
                             function(val, fieldNode, ruleValue) {
-                                return isValidId('<%= existingIdsURL %>', val);
+                                return isValidId(val);
                             }
                         </aui:validator>
                         <aui:validator errorMessage="Only the alphanumeric and the dash characters are allowed." name="custom">
@@ -91,9 +91,52 @@
 
 </div>
 
-<script>
+<aui:script>
+    function generateIdOnInput() {
+        var validation = Liferay.component('<portlet:namespace />Validation');
+
+        if (validation) {
+            return validation.generateIdOnInput();
+        }
+    }
+
+    function validateOnInput() {
+        var validation = Liferay.component('<portlet:namespace />Validation');
+
+        if (validation) {
+            return validation.validateOnInput();
+        }
+    }
+
+    function isValidName(value) {
+        var validation = Liferay.component('<portlet:namespace />Validation');
+
+        if (validation) {
+            return validation.isValidName('<%= existingNamesURL %>', value);
+        }
+    }
+
+    function isValidId(value) {
+        var validation = Liferay.component('<portlet:namespace />Validation');
+
+        if (validation) {
+            return validation.isValidId('<%= existingIdsURL %>', value);
+        }
+    }
+</aui:script>
+
+<aui:script use="layout-template-validation">
+    var validation = Liferay.component(
+        '<portlet:namespace />Validation',
+        new Liferay.Validation(
+            {
+                namespace: '<portlet:namespace />'
+            }
+        )
+    );
+
     Liferay.on('allPortletsReady', function () {
-        generateIdOnInput('<portlet:namespace />');
-        validateOnInput('<portlet:namespace />');
+        generateIdOnInput();
+        validateOnInput();
     });
-</script>
+</aui:script>

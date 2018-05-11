@@ -1,44 +1,89 @@
-var generateIdOnInput = function (namespace) {
-    jQuery('#' + namespace + 'name').on('input', function (e) {
-       var name = jQuery(this).val();
-       var id = name.toLowerCase().replace(/ /g, '-');
+AUI.add(
+    'layout-template-validation',
+    function (A) {
 
-       jQuery('#' + namespace + 'id').val(id);
-    });
-}
+        var Lang = A.Lang;
 
-var validateOnInput = function (namespace) {
-    jQuery('#' + namespace + 'name').on('input', function (e) {
-        var formValidator = Liferay.Form.get(namespace + 'fm').formValidator;
+        var Validation = A.Component.create(
+            {
+                ATTRS: {
+                    namespace: {
+                        validator: Lang.isString
+                    }
+                },
 
-        formValidator.validateField(namespace + 'name');
-        formValidator.validateField(namespace + 'id');
-    });
-}
+                EXTENDS: A.Base,
 
-var isValidId = function (resourceUrl, val) {
-    return !alreadyExist(resourceUrl, val);
-}
+                NAME: 'layout-template-validation',
 
-var isValidName = function (resourceUrl, val) {
-    return !alreadyExist(resourceUrl, val);
-}
+                NS: 'layout-template-validation',
 
-var alreadyExist = function (url, val) {
-    var valid = false;
+                prototype: {
 
-    jQuery.ajax({
-        url: url,
-        dataType: 'json',
-        method: 'GET',
-        async: false,
-        success: function (response) {
-            valid = response.includes(val);
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+                    generateIdOnInput: function () {
+                        var instance = this;
+                        var namespace = instance.get('namespace');
 
-    return valid;
-}
+                        jQuery('#' + namespace + 'name').on('input', function (e) {
+                           var name = jQuery(this).val();
+                           if (name) {
+                               var id = name.trim().toLowerCase().replace(/\s+/g, '-');
+
+                               jQuery('#' + namespace + 'id').val(id);
+                           }
+                        });
+                    },
+
+                    validateOnInput: function () {
+                        var instance = this;
+                        var namespace = instance.get('namespace');
+
+                        jQuery('#' + namespace + 'name').on('input', function (e) {
+                            var formValidator = Liferay.Form.get(namespace + 'fm').formValidator;
+
+                            formValidator.validateField(namespace + 'name');
+                            formValidator.validateField(namespace + 'id');
+                        });
+                    },
+
+                    isValidId: function (resourceUrl, val) {
+                        var instance = this;
+
+                        return !instance.alreadyExist(resourceUrl, val);
+                    },
+
+                    isValidName: function (resourceUrl, val) {
+                        var instance = this;
+
+                        return !instance.alreadyExist(resourceUrl, val);
+                    },
+
+                    alreadyExist: function (url, val) {
+                        var valid = false;
+
+                        jQuery.ajax({
+                            url: url,
+                            dataType: 'json',
+                            method: 'GET',
+                            async: false,
+                            success: function (response) {
+                                valid = response.includes(val);
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+
+                        return valid;
+                    }
+                }
+            }
+        );
+
+        Liferay.Validation = Validation;
+    },
+    '',
+    {
+        requires: ['aui-base', 'aui-io-request']
+    }
+)
