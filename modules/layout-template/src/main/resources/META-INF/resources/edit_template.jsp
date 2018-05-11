@@ -15,7 +15,7 @@
 <div class="container-fluid-1280">
 
     <portlet:actionURL name="/tpl/edit_template" var="updateLayoutTemplateURL">
-            <portlet:param name="redirect" value="<%= currentURL %>" />
+        <portlet:param name="redirect" value="<%= currentURL %>" />
     </portlet:actionURL>
 
     <aui:form action="<%= updateLayoutTemplateURL %>" method="post" name="fm">
@@ -25,23 +25,23 @@
         <aui:fieldset-group markupView="lexicon">
             <aui:fieldset>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <aui:input readonly="<%= true %>" name="name" value="<%= layoutTemplateName %>" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <aui:input readonly="<%= true %>" name="name" value="<%= layoutTemplateName %>" />
+                    </div>
+                    <div class="col-md-2">
+                        <aui:input readonly="<%= true %>" name="size" value="<%= layoutTemplateSize %>" />
+                    </div>
+                    <div class="col-md-4">
+                        <aui:input readonly="<%= true %>" name="last-modified-time" value="<%= layoutTemplateLastModifiedTime %>" />
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <aui:input readonly="<%= true %>" name="size" value="<%= layoutTemplateSize %>" />
-                </div>
-                <div class="col-md-4">
-                    <aui:input readonly="<%= true %>" name="last-modified-time" value="<%= layoutTemplateLastModifiedTime %>" />
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <aui:input name="content" type="textarea" value="<%= layoutTemplateContent %>" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <aui:input name="content" type="textarea" value="<%= layoutTemplateContent %>" />
+                    </div>
                 </div>
-            </div>
 
             </aui:fieldset>
         </aui:fieldset-group>

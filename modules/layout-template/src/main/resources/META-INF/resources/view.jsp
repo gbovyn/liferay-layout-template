@@ -2,6 +2,7 @@
 
 <%
     PortletURL iteratorURL = renderResponse.createRenderURL();
+
     List<LayoutTemplate> templates = (List<LayoutTemplate>) request.getAttribute("templates");
 %>
 
@@ -44,12 +45,13 @@
                             path="/entry_actions.jsp"
                     />
                 </liferay-ui:search-container-row>
+
                 <liferay-ui:search-iterator />
             </liferay-ui:search-container>
 
             <portlet:renderURL var="addLayoutTemplateURL">
-                    <portlet:param name="mvcRenderCommandName" value="/tpl/create_template" />
-                    <portlet:param name="redirect" value="<%= currentURL %>" />
+                <portlet:param name="mvcRenderCommandName" value="/tpl/create_template" />
+                <portlet:param name="redirect" value="<%= currentURL %>" />
             </portlet:renderURL>
 
             <liferay-frontend:add-menu>

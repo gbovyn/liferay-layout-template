@@ -13,7 +13,7 @@
 <div class="container-fluid-1280">
 
     <portlet:actionURL name="/tpl/create_template" var="createLayoutTemplateURL">
-            <portlet:param name="redirect" value="<%= currentURL %>" />
+        <portlet:param name="redirect" value="<%= currentURL %>" />
     </portlet:actionURL>
 
     <aui:form action="<%= createLayoutTemplateURL %>" method="post" name="fm">
