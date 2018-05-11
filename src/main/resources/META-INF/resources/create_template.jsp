@@ -31,6 +31,20 @@
                                 return isValidName('<%= existingNamesURL %>', val);
                             }
                         </aui:validator>
+                        <aui:validator errorMessage="Only alphanumeric, space and dash characters are allowed." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                var regex = new RegExp(/^[a-zA-Z0-9-\s]+$/i);
+
+                                return regex.test(val);
+                            }
+                        </aui:validator>
+                        <aui:validator errorMessage="The name cannot start or end with a dash." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                var regex = new RegExp(/^(?!-).*(?<!-)$/i);
+
+                                return regex.test(val);
+                            }
+                        </aui:validator>
                     </aui:input>
                 </div>
 			    <div class="col-md-6">
@@ -39,6 +53,20 @@
                         <aui:validator errorMessage="Id must be unique." name="custom">
                             function(val, fieldNode, ruleValue) {
                                 return isValidId('<%= existingIdsURL %>', val);
+                            }
+                        </aui:validator>
+                        <aui:validator errorMessage="Only the alphanumeric and the dash characters are allowed." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                var regex = new RegExp(/^[a-zA-Z0-9-]+$/i);
+
+                                return regex.test(val);
+                            }
+                        </aui:validator>
+                        <aui:validator errorMessage="The id cannot start or end with a dash." name="custom">
+                            function(val, fieldNode, ruleValue) {
+                                var regex = new RegExp(/^(?!-).*(?<!-)$/i);
+
+                                return regex.test(val);
                             }
                         </aui:validator>
                     </aui:input>
@@ -65,6 +93,7 @@
 
 <script>
     Liferay.on('allPortletsReady', function () {
-        generateIdOnInputChange('<portlet:namespace />');
+        generateIdOnInput('<portlet:namespace />');
+        validateOnInput('<portlet:namespace />');
     });
 </script>

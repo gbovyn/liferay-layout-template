@@ -27,13 +27,13 @@ import java.util.Map;
 		property = {
 				"com.liferay.portlet.display-category=category.sample",
 				"com.liferay.portlet.instanceable=true",
-				"com.liferay.portlet.footer-portlet-javascript=/js/validation.js",
 				"javax.portlet.display-name=Layout Template Portlet",
 				"javax.portlet.init-param.template-path=/",
 				"javax.portlet.init-param.view-template=/view.jsp",
 				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
 				"javax.portlet.resource-bundle=content.Language",
-				"javax.portlet.security-role-ref=power-user,user"
+				"javax.portlet.security-role-ref=power-user,user",
+				"com.liferay.portlet.footer-portlet-javascript=/js/validation.js"
 		},
 		service = Portlet.class
 )

@@ -1,9 +1,18 @@
-var generateIdOnInputChange = function (namespace) {
+var generateIdOnInput = function (namespace) {
     jQuery('#' + namespace + 'name').on('input', function (e) {
        var name = jQuery(this).val();
        var id = name.toLowerCase().replace(/ /g, '-');
 
        jQuery('#' + namespace + 'id').val(id);
+    });
+}
+
+var validateOnInput = function (namespace) {
+    jQuery('#' + namespace + 'name').on('input', function (e) {
+        var formValidator = Liferay.Form.get(namespace + 'fm').formValidator;
+
+        formValidator.validateField(namespace + 'name');
+        formValidator.validateField(namespace + 'id');
     });
 }
 
