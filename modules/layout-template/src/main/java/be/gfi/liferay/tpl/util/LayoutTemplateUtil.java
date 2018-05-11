@@ -149,6 +149,12 @@ public class LayoutTemplateUtil {
 		return Try.success(layoutTemplate);
 	}
 
+	/**
+	 * Get the list of all template ids already in the zip file.
+	 *
+	 * @param zipPath path to the zip file.
+	 * @return list of all template ids.
+	 */
 	public static List<String> getExistingTemplateIds(final Path zipPath) {
 		final Try<List<LayoutTemplate>> layoutTemplates = getCustomLayoutTemplates(zipPath);
 
@@ -161,6 +167,12 @@ public class LayoutTemplateUtil {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Get the list of all template names already in the zip file.
+	 *
+	 * @param zipPath path to the zip file.
+	 * @return list of all template names.
+	 */
 	public static List<String> getExistingTemplateNames(final Path zipPath) {
 		final Try<List<LayoutTemplate>> layoutTemplates = getCustomLayoutTemplates(zipPath);
 
@@ -173,10 +185,22 @@ public class LayoutTemplateUtil {
 				.collect(Collectors.toList());
 	}
 
+	/**
+	 * Create the template filename based on the template id.
+	 *
+	 * @param id the template id.
+	 * @return a filename with a .tpl extension.
+	 */
 	public static String getTemplatePath(final String id) {
 		return id.replace('-', '_') + TPL_EXT;
 	}
 
+	/**
+	 * Create the thumbnail filename based on the template id.
+	 *
+	 * @param id the template id.
+	 * @return a filename with a .png extension.
+	 */
 	public static String getThumbnailPath(final String id) {
 		return id.replace('-', '_') + PNG_EXT;
 	}
