@@ -19,45 +19,46 @@ import javax.portlet.ActionResponse;
 import java.nio.file.Path;
 
 @Component(
-		immediate = true,
-		property = {
-				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
-				"mvc.command.name=/tpl/create_template"
-		},
-		service = MVCActionCommand.class
+        immediate = true,
+        property = {
+                "javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
+                "mvc.command.name=/tpl/create_template"
+        },
+        service = MVCActionCommand.class
 )
 public class CreateTemplateMVCActionCommand extends BaseMVCActionCommand {
-	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	private ConfigurationHelper configurationHelper;
+    private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	@Override
-	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
-		final String id = actionRequest.getParameter("id");
-		final String name = actionRequest.getParameter("name");
-		final String content = actionRequest.getParameter("content");
+    private ConfigurationHelper configurationHelper;
 
-		final String templatePath = LayoutTemplateUtil.getTemplatePath(id);
-		final String thumbnailPath = LayoutTemplateUtil.getThumbnailPath(id);
+    @Override
+    protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
+        final String id = actionRequest.getParameter("id");
+        final String name = actionRequest.getParameter("name");
+        final String content = actionRequest.getParameter("content");
 
-		final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
+        final String templatePath = LayoutTemplateUtil.getTemplatePath(id);
+        final String thumbnailPath = LayoutTemplateUtil.getThumbnailPath(id);
 
-		final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
-				configurationHelper.getWarName()
-		);
+        final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
 
-		final Try createTry = LayoutTemplateUtil.createLayoutTemplate(
-				zipPath, layoutTemplate, content
-		);
+        final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
+                configurationHelper.getWarName()
+        );
 
-		if (createTry.isFailure()) {
-			SessionErrors.add(actionRequest, "error", createTry.getCause());
-			logger.error(createTry.getCause().getMessage(), createTry.getCause());
-		}
-	}
+        final Try createTry = LayoutTemplateUtil.createLayoutTemplate(
+                zipPath, layoutTemplate, content
+        );
 
-	@Activate
-	private void activate() {
-		configurationHelper = new ConfigurationHelper();
-	}
+        if (createTry.isFailure()) {
+            SessionErrors.add(actionRequest, "error", createTry.getCause());
+            logger.error(createTry.getCause().getMessage(), createTry.getCause());
+        }
+    }
+
+    @Activate
+    private void activate() {
+        configurationHelper = new ConfigurationHelper();
+    }
 }

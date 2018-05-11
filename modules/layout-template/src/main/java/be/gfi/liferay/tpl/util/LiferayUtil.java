@@ -7,13 +7,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class LiferayUtil {
-	private static final String OSGI_WAR = "osgi/war";
 
-	public static Path getOsgiWarFolder() {
-		return Paths.get(getLiferayHome(), OSGI_WAR);
-	}
+    private static final String OSGI_WAR = "osgi/war";
 
-	private static String getLiferayHome() {
-		return PropsUtil.get(PropsKeys.LIFERAY_HOME);
-	}
+    public static Path getOsgiWarFolder() {
+        return Paths.get(getLiferayHome(), OSGI_WAR);
+    }
+
+    private static String getLiferayHome() {
+        return PropsUtil.get(PropsKeys.LIFERAY_HOME);
+    }
 }

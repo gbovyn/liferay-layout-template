@@ -19,44 +19,45 @@ import javax.portlet.ActionResponse;
 import java.nio.file.Path;
 
 @Component(
-		immediate = true,
-		property = {
-				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
-				"mvc.command.name=/tpl/delete_template"
-		},
-		service = MVCActionCommand.class
+        immediate = true,
+        property = {
+                "javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
+                "mvc.command.name=/tpl/delete_template"
+        },
+        service = MVCActionCommand.class
 )
 public class DeleteTemplateMVCActionCommand extends BaseMVCActionCommand {
-	private static final Logger logger = LoggerFactory.getLogger(DeleteTemplateMVCActionCommand.class.getName());
 
-	private ConfigurationHelper configurationHelper;
+    private static final Logger logger = LoggerFactory.getLogger(DeleteTemplateMVCActionCommand.class.getName());
 
-	@Override
-	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
-		final String id = actionRequest.getParameter("id");
-		final String name = actionRequest.getParameter("name");
-		final String templatePath = actionRequest.getParameter("templatePath");
-		final String thumbnailPath = actionRequest.getParameter("thumbnailPath");
+    private ConfigurationHelper configurationHelper;
 
-		final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
+    @Override
+    protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
+        final String id = actionRequest.getParameter("id");
+        final String name = actionRequest.getParameter("name");
+        final String templatePath = actionRequest.getParameter("templatePath");
+        final String thumbnailPath = actionRequest.getParameter("thumbnailPath");
 
-		final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
-				configurationHelper.getWarName()
-		);
+        final LayoutTemplate layoutTemplate = new LayoutTemplate(id, name, templatePath, thumbnailPath);
 
-		final Try tryToDelete = LayoutTemplateUtil.deleteLayoutTemplate(
-				zipPath,
-				layoutTemplate
-		);
+        final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
+                configurationHelper.getWarName()
+        );
 
-		if (tryToDelete.isFailure()) {
-			SessionErrors.add(actionRequest, "error", tryToDelete.getCause());
-			logger.error(tryToDelete.getCause().getMessage());
-		}
-	}
+        final Try tryToDelete = LayoutTemplateUtil.deleteLayoutTemplate(
+                zipPath,
+                layoutTemplate
+        );
 
-	@Activate
-	private void activate() {
-		configurationHelper = new ConfigurationHelper();
-	}
+        if (tryToDelete.isFailure()) {
+            SessionErrors.add(actionRequest, "error", tryToDelete.getCause());
+            logger.error(tryToDelete.getCause().getMessage());
+        }
+    }
+
+    @Activate
+    private void activate() {
+        configurationHelper = new ConfigurationHelper();
+    }
 }

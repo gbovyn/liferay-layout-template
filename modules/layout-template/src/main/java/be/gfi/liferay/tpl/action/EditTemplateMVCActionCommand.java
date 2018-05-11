@@ -19,37 +19,38 @@ import javax.portlet.ActionResponse;
 import java.nio.file.Path;
 
 @Component(
-		immediate = true,
-		property = {
-				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
-				"mvc.command.name=/tpl/edit_template"
-		},
-		service = MVCActionCommand.class
+        immediate = true,
+        property = {
+                "javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
+                "mvc.command.name=/tpl/edit_template"
+        },
+        service = MVCActionCommand.class
 )
 public class EditTemplateMVCActionCommand extends BaseMVCActionCommand {
-	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	private ConfigurationHelper configurationHelper;
+    private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	@Override
-	protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
-		final String redirect = ParamUtil.getString(actionRequest, "redirect");
+    private ConfigurationHelper configurationHelper;
 
-		final String name = actionRequest.getParameter("name");
-		final String content = actionRequest.getParameter("content");
+    @Override
+    protected void doProcessAction(final ActionRequest actionRequest, final ActionResponse actionResponse) {
+        final String redirect = ParamUtil.getString(actionRequest, "redirect");
 
-		final Try<Path> tryToUpdate = ZipUtil.writeFileToZip(
-				LiferayUtil.getOsgiWarFolder().resolve(configurationHelper.getWarName()), name, content
-		);
+        final String name = actionRequest.getParameter("name");
+        final String content = actionRequest.getParameter("content");
 
-		if (tryToUpdate.isFailure()) {
-			SessionErrors.add(actionRequest, "error", tryToUpdate.getCause());
-			logger.error(tryToUpdate.getCause().getMessage());
-		}
-	}
+        final Try<Path> tryToUpdate = ZipUtil.writeFileToZip(
+                LiferayUtil.getOsgiWarFolder().resolve(configurationHelper.getWarName()), name, content
+        );
 
-	@Activate
-	private void activate() {
-		configurationHelper = new ConfigurationHelper();
-	}
+        if (tryToUpdate.isFailure()) {
+            SessionErrors.add(actionRequest, "error", tryToUpdate.getCause());
+            logger.error(tryToUpdate.getCause().getMessage());
+        }
+    }
+
+    @Activate
+    private void activate() {
+        configurationHelper = new ConfigurationHelper();
+    }
 }

@@ -8,20 +8,21 @@ import org.osgi.service.component.annotations.Modified;
 import java.util.Map;
 
 @Component(
-		immediate = true
+        immediate = true
 )
 public class ConfigurationHelper {
-	private static volatile LayoutTemplateConfiguration configuration;
 
-	@Activate
-	@Modified
-	protected void activate(Map<String, Object> properties) {
-		configuration = ConfigurableUtil.createConfigurable(
-				LayoutTemplateConfiguration.class, properties
-		);
-	}
+    private static volatile LayoutTemplateConfiguration configuration;
 
-	public String getWarName() {
-		return configuration.warName();
-	}
+    @Activate
+    @Modified
+    protected void activate(Map<String, Object> properties) {
+        configuration = ConfigurableUtil.createConfigurable(
+                LayoutTemplateConfiguration.class, properties
+        );
+    }
+
+    public String getWarName() {
+        return configuration.warName();
+    }
 }

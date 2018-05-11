@@ -21,54 +21,55 @@ import java.util.Collections;
 import java.util.List;
 
 @Component(
-		property = {
-				"javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
-				"mvc.command.name=/tpl/existing_ids",
-				"mvc.command.name=/tpl/existing_names"
-		},
-		service = MVCResourceCommand.class
+        property = {
+                "javax.portlet.name=" + LayoutTemplatePortletKeys.LayoutTemplate,
+                "mvc.command.name=/tpl/existing_ids",
+                "mvc.command.name=/tpl/existing_names"
+        },
+        service = MVCResourceCommand.class
 )
 public class CreateTemplateMVCResourceCommand implements MVCResourceCommand {
-	private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	private ConfigurationHelper configurationHelper;
+    private static final Logger logger = LoggerFactory.getLogger(EditTemplateMVCActionCommand.class.getName());
 
-	@Override
-	public boolean serveResource(final ResourceRequest resourceRequest, final ResourceResponse resourceResponse) {
-		final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
-				configurationHelper.getWarName()
-		);
+    private ConfigurationHelper configurationHelper;
 
-		final List<String> existing = getExistingList(
-				zipPath,
-				resourceRequest.getResourceID()
-		);
+    @Override
+    public boolean serveResource(final ResourceRequest resourceRequest, final ResourceResponse resourceResponse) {
+        final Path zipPath = LiferayUtil.getOsgiWarFolder().resolve(
+                configurationHelper.getWarName()
+        );
 
-		final JSONSerializer serializer = JSONFactoryUtil.createJSONSerializer();
-		final String jsonArray = serializer.serialize(existing);
+        final List<String> existing = getExistingList(
+                zipPath,
+                resourceRequest.getResourceID()
+        );
 
-		final Try<Void> tryGetWriter = Try.run(() -> {
-			final PrintWriter writer = resourceResponse.getWriter();
+        final JSONSerializer serializer = JSONFactoryUtil.createJSONSerializer();
+        final String jsonArray = serializer.serialize(existing);
 
-			writer.write(jsonArray);
-		});
+        final Try<Void> tryGetWriter = Try.run(() -> {
+            final PrintWriter writer = resourceResponse.getWriter();
 
-		return tryGetWriter.isFailure();
-	}
+            writer.write(jsonArray);
+        });
 
-	private List<String> getExistingList(final Path zipPath, final String resourceId) {
-		switch (resourceId) {
-			case "/tpl/existing_ids":
-				return LayoutTemplateUtil.getExistingTemplateIds(zipPath);
-			case "/tpl/existing_names":
-				return LayoutTemplateUtil.getExistingTemplateNames(zipPath);
-			default:
-				return Collections.emptyList();
-		}
-	}
+        return tryGetWriter.isFailure();
+    }
 
-	@Activate
-	private void activate() {
-		configurationHelper = new ConfigurationHelper();
-	}
+    private List<String> getExistingList(final Path zipPath, final String resourceId) {
+        switch (resourceId) {
+            case "/tpl/existing_ids":
+                return LayoutTemplateUtil.getExistingTemplateIds(zipPath);
+            case "/tpl/existing_names":
+                return LayoutTemplateUtil.getExistingTemplateNames(zipPath);
+            default:
+                return Collections.emptyList();
+        }
+    }
+
+    @Activate
+    private void activate() {
+        configurationHelper = new ConfigurationHelper();
+    }
 }
