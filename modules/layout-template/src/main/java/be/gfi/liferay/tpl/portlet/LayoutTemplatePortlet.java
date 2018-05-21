@@ -41,6 +41,8 @@ public class LayoutTemplatePortlet extends MVCPortlet {
 
     private volatile LayoutTemplateConfiguration configuration;
 
+    public static final String TEMP_FOLDER_NAME = "be.gfi.liferay.tpl";
+
     @Override
     public void doView(final RenderRequest renderRequest, final RenderResponse renderResponse) throws IOException, PortletException {
         String warName = getLayoutTemplateWarName();

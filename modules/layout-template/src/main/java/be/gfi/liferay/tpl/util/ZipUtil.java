@@ -4,6 +4,7 @@ import io.vavr.control.Try;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -44,9 +45,23 @@ public class ZipUtil {
     }
 
     public static Try<Path> writeFileToZip(final Path zipPath, final String filename, final String content) {
+        return writeFileToZip(zipPath, filename, content.getBytes());
+    }
+
+    public static Try<Path> writeFileToZip(final Path zipPath, final String filename, final InputStream inputStream) {
+        final Try<byte[]> bytes = Try.withResources(() -> inputStream).of(IOUtils::toByteArray);
+
+        if (bytes.isFailure()) {
+            return Try.failure(bytes.getCause());
+        }
+
+        return writeFileToZip(zipPath, filename, bytes.get());
+    }
+
+    public static Try<Path> writeFileToZip(final Path zipPath, final String filename, final byte[] bytes) {
         return Try.withResources(() -> getZipAsFileSystem(zipPath)).of(fs -> {
                     final Path path = Files.write(
-                            fs.getPath(filename), content.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
+                            fs.getPath(filename), bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING
                     );
 
                     Files.setLastModifiedTime(

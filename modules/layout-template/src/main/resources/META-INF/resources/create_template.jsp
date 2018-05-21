@@ -80,6 +80,22 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Thumbnail</label>
+
+                        <div class="lfr-dynamic-uploader" id="<portlet:namespace />uploaderContainer">
+                            <div class="lfr-upload-container" id="<portlet:namespace />fileUpload"></div>
+                        </div>
+
+                        <span id="<portlet:namespace />selectedFileNameContainer"></span>
+
+                        <div class="hide" id="<portlet:namespace />metadataExplanationContainer"></div>
+
+                        <div class="hide selected" id="<portlet:namespace />selectedFileNameMetadataContainer"></div>
+                    </div>
+                </div>
+
             </aui:fieldset>
         </aui:fieldset-group>
 
@@ -91,6 +107,46 @@
     </aui:form>
 
 </div>
+
+<%
+    DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance(locale);
+
+    DLConfiguration dlConfiguration = ConfigurationProviderUtil.getSystemConfiguration(DLConfiguration.class);
+%>
+
+<liferay-portlet:actionURL name="/tpl/upload_thumbnail" var="deleteTempFile">
+    <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE_TEMP %>" />
+</liferay-portlet:actionURL>
+
+<liferay-portlet:actionURL name="/tpl/upload_thumbnail" var="addTempFile">
+    <portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" />
+</liferay-portlet:actionURL>
+
+<aui:script use="liferay-upload">
+    var uploader = new Liferay.Upload(
+        {
+            boundingBox: '#<portlet:namespace />fileUpload',
+            decimalSeparator: '<%= decimalFormatSymbols.getDecimalSeparator() %>',
+            deleteFile: '<%= deleteTempFile %>',
+            fallback: '#<portlet:namespace />fallback',
+            fileDescription: '<%= StringUtil.merge(dlConfiguration.fileExtensions()) %>',
+            maxFileSize: '<%= dlConfiguration.fileMaxSize() %>',
+            metadataContainer: '#<portlet:namespace />commonFileMetadataContainer',
+            metadataExplanationContainer: '#<portlet:namespace />metadataExplanationContainer',
+            multipleFiles: false,
+            namespace: '<portlet:namespace />',
+            rootElement: '#<portlet:namespace />uploaderContainer',
+            tempFileURL: {
+                method: Liferay.Service.bind('/tpl/upload_thumbnail'),
+                params: {
+                    folderName: '<%= LayoutTemplatePortlet.TEMP_FOLDER_NAME %>'
+                }
+            },
+            tempRandomSuffix: '<%= TempFileEntryUtil.TEMP_RANDOM_SUFFIX %>',
+            uploadFile: '<%= addTempFile %>'
+        }
+    )
+</aui:script>
 
 <aui:script>
     function generateIdOnInput() {

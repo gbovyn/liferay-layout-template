@@ -5,6 +5,7 @@ import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import io.vavr.control.Try;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +65,7 @@ public class LayoutTemplateUtil {
      * @param content        the layout template xml
      * @return whether the try to add the layout template in the war was successful or not.
      */
-    public static Try createLayoutTemplate(final Path zipPath, final LayoutTemplate layoutTemplate, final String content) {
+    public static Try createLayoutTemplate(final Path zipPath, final LayoutTemplate layoutTemplate, final String content, final InputStream thumbnail) {
         final Try<String> layoutTemplatesXml = getLayoutTemplatesXml(zipPath);
 
         if (layoutTemplatesXml.isFailure()) {
@@ -91,10 +92,19 @@ public class LayoutTemplateUtil {
             return Try.failure(tryToUpdateXmlConfig.getCause());
         }
 
-        final Try tryToAddZip = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getTemplatePath(), content);
+        final Try tryToAddContent = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getTemplatePath(), content);
 
-        if (tryToAddZip.isFailure()) {
-            return Try.failure(tryToAddZip.getCause());
+        if (tryToAddContent.isFailure()) {
+            return Try.failure(tryToAddContent.getCause());
+        }
+
+        final Try<Boolean> thumbnailExists = Try.of(() -> thumbnail.available() > 0);
+        if (thumbnailExists.isSuccess() && thumbnailExists.get()) {
+            final Try tryToAddThumbnail = ZipUtil.writeFileToZip(zipPath, layoutTemplate.getThumbnailPath(), thumbnail);
+
+            if (tryToAddThumbnail.isFailure()) {
+                return Try.failure(tryToAddThumbnail.getCause());
+            }
         }
 
         return Try.success(layoutTemplate);

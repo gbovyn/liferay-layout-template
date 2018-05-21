@@ -1,6 +1,7 @@
 package be.gfi.liferay.tpl.util;
 
 import be.gfi.liferay.tpl.model.LayoutTemplate;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
@@ -57,10 +58,10 @@ public class XmlUtil {
         layoutTemplateElement.addAttribute(NAME, layoutTemplate.getName());
 
         final Element templatePath = SAXReaderUtil.createElement(TEMPLATE_PATH);
-        templatePath.addText(layoutTemplate.getTemplatePath());
+        templatePath.addText(StringPool.SLASH + layoutTemplate.getTemplatePath());
 
         final Element thumbnailPath = SAXReaderUtil.createElement(THUMBNAIL_PATH);
-        thumbnailPath.addText(layoutTemplate.getThumbnailPath());
+        thumbnailPath.addText(StringPool.SLASH + layoutTemplate.getThumbnailPath());
 
         layoutTemplateElement.add(templatePath);
         layoutTemplateElement.add(thumbnailPath);
