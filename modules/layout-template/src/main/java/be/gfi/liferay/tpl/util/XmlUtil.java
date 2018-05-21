@@ -5,7 +5,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
-import com.liferay.portal.kernel.xml.UnsecureSAXReaderUtil;
 import io.vavr.control.Try;
 
 public class XmlUtil {
@@ -34,9 +33,7 @@ public class XmlUtil {
     }
 
     public static Try<Document> addCustomLayoutTemplate(final String liferayLayoutTemplatesXml, final LayoutTemplate layoutTemplate) {
-        final Try<Document> document = Try.of(() ->
-                SAXReaderUtil.read(liferayLayoutTemplatesXml)
-        );
+        final Try<Document> document = parseXml(liferayLayoutTemplatesXml);
 
         if (document.isFailure()) {
             return Try.failure(document.getCause());
@@ -77,9 +74,7 @@ public class XmlUtil {
      * @return the document without the deleted layout template.
      */
     public static Try<Document> removeLayoutTemplate(final String liferayLayoutTemplatesXml, final String templateId) {
-        final Try<Document> document = Try.of(() ->
-                SAXReaderUtil.read(liferayLayoutTemplatesXml)
-        );
+        final Try<Document> document = parseXml(liferayLayoutTemplatesXml);
 
         if (document.isFailure()) {
             return Try.failure(document.getCause());
@@ -99,7 +94,7 @@ public class XmlUtil {
 
     private static Try<Document> parseXml(final String liferayLayoutTemplatesXml) {
         return Try.of(() ->
-                UnsecureSAXReaderUtil.read(liferayLayoutTemplatesXml)
+                SAXReaderUtil.read(liferayLayoutTemplatesXml)
         );
     }
 }
